@@ -1,31 +1,58 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Service.OtpService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/otp")
 public class control {
+
+    @Autowired
+    private OtpService otpService;
+
     @GetMapping
-    public String Hello(){
+    public String Hello() {
         Map<String, Object> Response = new HashMap<>();
-        return "hii";
+        return "this is an otp gen and val service";
     }
 
-    @GetMapping("/h")
-    public String Hello1(){
+    @PostMapping("/gen")
+    public ResponseEntity<Map<String, Object>> OtpGen(@RequestBody Map<String, String> request) {
         Map<String, Object> Response = new HashMap<>();
-        return "hii12";
+        String email = request.get("email");
+
+        Response.put("Otp", otpService.sendOTP(email));
+
+        return ResponseEntity.ok(Response);
+    }
+
+    @PostMapping("/val")
+    public ResponseEntity<Map<String, Object>> OtpVal(@RequestBody Map<String, String> request) {
+        Map<String, Object> Response = new HashMap<>();
+        String email = request.get("email");
+        String otp = request.get("otp");
+        boolean validation = otpService.valOTP(email, otp);
+
+        Response.put("email", email);
+        Response.put("Otp", otp);
+
+        if (validation) {
+            Response.put("Status", "validation Successful");
+        } else {
+            Response.put("Status", "validation error");
+        }
+
+        return ResponseEntity.ok(Response);
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Map<String, Object>> getData(HttpServletRequest request){
+    public ResponseEntity<Map<String, Object>> getData(HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Success");
         response.put("clientIp", request.getRemoteAddr());
