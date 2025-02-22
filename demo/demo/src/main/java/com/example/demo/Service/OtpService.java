@@ -1,4 +1,5 @@
 package com.example.demo.Service;
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class OtpService {
         return false;
     }
 
-    @Getter
+    @Data
     private static class OTPData {
         private final String otpCode;
         private final LocalDateTime expiryTime;
