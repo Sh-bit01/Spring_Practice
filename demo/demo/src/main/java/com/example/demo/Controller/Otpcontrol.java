@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/otp")
-public class control {
+@RequestMapping("/public/otp")
+public class Otpcontrol {
 
     @Autowired
     private OtpService otpService;
